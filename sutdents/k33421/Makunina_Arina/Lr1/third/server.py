@@ -9,7 +9,7 @@ server_socket.listen()
 
 # Выводим ссылку для просмотра
 print("Сервер запущен. Откройте браузер и перейдите по следующей ссылке:")
-print("http://localhost:8080/")
+print("http://localhost:7080/")
 
 while True:
     client_socket, _ = server_socket.accept()

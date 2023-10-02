@@ -53,7 +53,11 @@ class MyHTTPServer:
             discipline = params.get("discipline")
             grade = params.get("grade")
             if discipline and grade:
-                self.grades[discipline] = grade
+                if discipline in self.grades:
+                    existing_grades = self.grades[discipline]
+                    self.grades[discipline] = f"{existing_grades}, {grade}"
+                else:
+                    self.grades[discipline] = grade
                 self.send_response(client, 200, "OK", "Saved!")
             else:
                 self.send_response(
