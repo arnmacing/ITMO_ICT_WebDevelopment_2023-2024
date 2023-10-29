@@ -9,7 +9,7 @@ jobs:
   deploy_Lr1:
     runs-on: ubuntu-latest
     steps:
-      - name: config
+      - name: config_1
         uses: actions/checkout@v2
         with:
           path: Lr1
@@ -17,7 +17,7 @@ jobs:
   deploy_Lr2:
     runs-on: ubuntu-latest
     steps:
-      - name: config
+      - name: config_2
         uses: actions/checkout@v2
         with:
           path: Lr2
