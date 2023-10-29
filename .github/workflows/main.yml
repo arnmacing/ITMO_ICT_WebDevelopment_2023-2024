@@ -9,15 +9,15 @@ jobs:
   deploy_Lr1:
     runs-on: ubuntu-latest
     steps:
-      - name: config_1
+      - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          path: Lr1
+      - name: Deploy Lr1
+        uses: ./.github/workflows/Lr1/deploy_Lr1.yml
 
   deploy_Lr2:
     runs-on: ubuntu-latest
     steps:
-      - name: config_2
+      - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          path: Lr2
+      - name: Deploy Lr2
+        uses: ./.github/workflows/Lr2/deploy_Lr2.yml
