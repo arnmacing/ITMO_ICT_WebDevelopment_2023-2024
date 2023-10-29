@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
@@ -30,23 +30,54 @@
         <a href="{% url 'tablo' %}" class="btn btn-secondary">К таблице</a>
     </div>
 
-    <form method="post" class="mb-3">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form method="post" class="mb-5">
         {% csrf_token %}
-        {{ user_form.as_p }}
-        <button type="submit" class="btn btn-primary">Обновить</button>
-    </form>
-
-    <form method="post" class="mb-3">
-        {% csrf_token %}
-        {{ racer_form.as_p }}
+        <div class="form-group">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            {{ form.team.label_tag }}
+            {{ form.team }}
+        </div>
+        <div class="form-group">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            {{ form.experience.label_tag }}
+            {{ form.experience }}
+        </div>
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
 
-
-    <form method="post" class="mb-3">
+    <form method="post" class="mb-5">
         {% csrf_token %}
-        {{ password_form.as_p }}
-        <button type="submit" class="btn btn-primary">Сменить пароль</button>
+        <div class="form-group">
+            {{ password_form.old_password.label_tag }}
+            {{ password_form.old_password }}
+        </div>
+        <div class="form-group">
+            {{ password_form.new_password1.label_tag }}
+            {{ password_form.new_password1 }}
+        </div>
+        <div class="form-group">
+            {{ password_form.new_password2.label_tag }}
+            {{ password_form.new_password2 }}
+        </div>
+        <button type="submit" name="password_change" value="password_change" class="btn btn-primary">Изменить пароль
+        </button>
     </form>
 </div>
 </body>
