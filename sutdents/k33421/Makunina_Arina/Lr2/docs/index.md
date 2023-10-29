@@ -6,7 +6,7 @@
 <br><br>
 
 **<p style="text-align: center;">Отчёт</p>**
-<p style="text-align: center;">по лабораторной работе №1 «Работа с сокетами»</p>
+<p style="text-align: center;">по лабораторной работе №2 «Реализация простого сайта на django»</p>
 <p style="text-align: center;">по дисциплине «Веб-программирование»</p>
 
 <br><br>
