@@ -8,18 +8,48 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
         with:
           python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-      - uses: actions/cache@v3
+
+      - name: Set cache_id
+        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
         with:
-          key: mkdocs-material-${{ env.cache_id }}
           path: .cache
+          key: mkdocs-material-${{ env.cache_id }}
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material mkdocs-glightbox
-      - run: mkdocs gh-deploy --force
+
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material mkdocs-glightbox
+          mkdocs gh-deploy --force
         working-directory: ./students/k33421/Makunina_Arina
+
+      - name: Set up Jekyll
+        run: |
+          gem install bundler
+          bundle install
+        working-directory: ./students/k33421/Makunina_Arina
+
+      - name: Build and deploy with Jekyll
+        run: |
+          bundle exec jekyll build -s D:\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\docs -d ./_site
+        working-directory: ./students/k33421/Makunina_Arina
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add .
+          git commit -m "Deploy to GitHub Pages"
+          git push
