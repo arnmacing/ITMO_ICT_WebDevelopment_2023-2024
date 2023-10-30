@@ -43,7 +43,7 @@ jobs:
 
       - name: Build and deploy with Jekyll
         run: |
-          bundle exec jekyll build -s .\students\k33421\Makunina_Arina\docs -d ./_site
+          bundle exec jekyll build -s ./students\k33421\Makunina_Arina\docs -d ./_site
         working-directory: ./students/k33421/Makunina_Arina
 
       - name: Deploy to GitHub Pages
