@@ -42,9 +42,8 @@ jobs:
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add .
-          git commit -m "Deploy to GitHub Pages"
           git checkout gh-pages
-          git merge main
+          git merge main --allow-unrelated-histories
           git push
+
 
