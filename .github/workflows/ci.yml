@@ -44,6 +44,7 @@ jobs:
           git config user.name "GitHub Actions"
           git stash
           git checkout gh-pages
+          git push --set-upstream origin gh-pages
           git merge --allow-unrelated-histories main
           git push
         working-directory: ./students/k33421/Makunina_Arina
