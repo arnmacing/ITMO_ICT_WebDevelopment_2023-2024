@@ -1,54 +1,25 @@
 name: ci
-
 on:
   push:
     branches:
       - main
-
 permissions:
   contents: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.x
-
-      - name: Set cache_id
-        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v3
         with:
-          path: .cache
           key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
           restore-keys: |
             mkdocs-material-
-
-      - name: Install dependencies
-        run: |
-          pip install mkdocs-material mkdocs-glightbox
-          mkdocs gh-deploy --force
+      - run: pip install mkdocs-material mkdocs-glightbox
+      - run: mkdocs gh-deploy --force
         working-directory: ./students/k33421/Makunina_Arina
-
-      - name: Deploy to GitHub Pages
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-          git stash
-          git checkout gh-pages
-          git push --set-upstream origin gh-pages
-          git merge --allow-unrelated-histories main
-          git push
-        working-directory: ./students/k33421/Makunina_Arina
-
-
-
-
