@@ -4,6 +4,15 @@ theme:
   name: material
 
 repo_url: https://github.com/arnmacing/ITMO_ICT_WebDevelopment_2023-2024
+base_url: "/repository/"
+
+
+extra_css:
+  - assets/stylesheets/main.4b4a2bd9.min.css
+
+extra_javascript:
+  - javascripts/bundle.81fa17fe.min.js
+
 
 nav:
   - "№1: Сокеты":
