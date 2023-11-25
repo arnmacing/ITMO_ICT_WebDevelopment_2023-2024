@@ -39,6 +39,15 @@ class DrivingLicense(models.Model):
     type = models.CharField(max_length=10)
     issue_date = models.DateTimeField()
 
+    class DrivingLicense(models.Model):
+        owner = models.ForeignKey(CarOwner, on_delete=models.CASCADE)
+        license_number = models.CharField(max_length=10)
+        type = models.CharField(max_length=10)
+        issue_date = models.DateTimeField()
+
+        def __str__(self):
+            return f"License Number: {self.license_number}, Type: {self.type}, Issue Date: {self.issue_date}"
+
 
 class CustomUser(AbstractUser):
     passport_number = models.CharField(max_length=20)

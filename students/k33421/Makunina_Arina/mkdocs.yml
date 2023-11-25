@@ -24,3 +24,5 @@ nav:
   - "№2: Django":
       - lw2/index.md
       - lw2/task.md
+  - "№3: Django rest":
+      - pr3/practical_work.md
