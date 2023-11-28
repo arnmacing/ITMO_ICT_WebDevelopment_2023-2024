@@ -118,7 +118,7 @@ ERD:
 
 ## Файл views.py
 
-## Описание класса RoomViewSet
+### Описание класса RoomViewSet
 
 Класс RoomViewSet является представлением (view) для модели Room. Он наследуется от viewsets.ModelViewSet из пакета
 rest_framework.
