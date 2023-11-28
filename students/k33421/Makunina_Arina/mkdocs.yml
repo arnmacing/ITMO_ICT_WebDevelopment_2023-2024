@@ -16,3 +16,5 @@ nav:
       - lw2/task.md
   - "№3: Django rest":
       - pr3/practical_work.md
+      - lw3/index.md
+      - lw3/report.md
