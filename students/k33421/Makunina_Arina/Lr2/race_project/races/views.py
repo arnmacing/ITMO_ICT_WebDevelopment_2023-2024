@@ -1,7 +1,8 @@
 from django.contrib.auth import update_session_auth_hash, logout, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Race, Comment
+from .models import Race, Comment, RaceResult
+from django.db.models import Min
 from .forms import *
 from django.urls import reverse
 from django.contrib import messages
@@ -30,7 +31,17 @@ def base(request):
 @login_required
 def tablo(request):
     races = Race.objects.all()
-    return render(request, "tablo.html", {"races": races})
+    race_results = []
+
+    for race in races:
+        winner_result = race.raceresult_set.filter(team=race.winner).aggregate(min_time=Min('time_taken'))
+        min_time = winner_result.get('min_time')
+        race_results.append({
+            'race': race,
+            'min_time': min_time,
+        })
+
+    return render(request, "tablo.html", {"race_results": race_results})
 
 
 @login_required
@@ -109,3 +120,12 @@ def profile(request):
                 return redirect('profile')
 
     return render(request, 'profile.html', {'form': form, 'password_form': password_form})
+
+
+def all_race_results(request):
+    all_results = RaceResult.objects.all()
+
+    # Сортировка результатов по гонкам и времени прохождения
+    sorted_results = sorted(all_results, key=lambda x: (x.race.id, x.time_taken))
+
+    return render(request, "all_race_results.html", {"all_results": sorted_results})

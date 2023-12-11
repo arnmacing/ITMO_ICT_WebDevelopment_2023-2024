@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load custom_filters %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -57,19 +58,30 @@
         </tr>
         </thead>
         <tbody>
-        {% for race in races %}
+        {% for result in race_results %}
         <tr>
-            <td>{{ race.id }}</td>
-            <td>{{ race.name }}</td>
-            <td>{{ race.date }}</td>
-            <td>{{ race.winner }}</td>
+            <td>{{ result.race.id }}</td>
+            <td>{{ result.race.name }}</td>
+            <td>{{ result.race.date }}</td>
             <td>
-                <a href="{% url 'comments' race.id %}" class="btn btn-primary">Комментировать</a>
+                {% if result.race.winner %}
+                {% if result.min_time %}
+                {{ result.race.winner.name }} - {{ result.min_time|format_duration }}
+                {% else %}
+                No result available
+                {% endif %}
+                {% else %}
+                No winner yet
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'comments' result.race.id %}" class="btn btn-primary">Комментировать</a>
             </td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
+    <a href="{% url 'all_race_results' %}" class="btn btn-info">Все результаты гонок</a>
 </div>
 </body>
 </html>

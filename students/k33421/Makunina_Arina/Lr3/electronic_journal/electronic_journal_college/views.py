@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
+from rest_framework.permissions import IsAuthenticated
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -39,6 +40,7 @@ class TimeSlotViewSet(viewsets.ModelViewSet):
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Schedule.objects.all()
     serializer_class = ScheduleSerializer
 

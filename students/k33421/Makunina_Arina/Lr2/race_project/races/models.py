@@ -41,6 +41,19 @@ class Race(models.Model):
         verbose_name_plural = "Гонки"
 
 
+class RaceResult(models.Model):
+    race = models.ForeignKey(Race, on_delete=models.CASCADE, verbose_name="Гонка")
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name="Команда")
+    time_taken = models.DurationField(verbose_name="Время прохождения")
+
+    def __str__(self):
+        return f"{self.race.name} - {self.team.name} - {self.time_taken}"
+
+    class Meta:
+        verbose_name = "Результат гонки"
+        verbose_name_plural = "Результаты гонок"
+
+
 class RaceEntry(models.Model):
     racer = models.ForeignKey(Racer, on_delete=models.CASCADE, verbose_name="Гонщик")
     race = models.ForeignKey(Race, on_delete=models.CASCADE, verbose_name="Гонка")

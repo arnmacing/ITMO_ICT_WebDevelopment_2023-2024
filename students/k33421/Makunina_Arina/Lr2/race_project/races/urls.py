@@ -13,4 +13,5 @@ urlpatterns = [
     path("profile/", profile, name="profile"),
     path("races/", tablo, name="tablo"),
     path("races/<int:race_id>/comments/", comments, name="comments"),
+    path('all_race_results/', all_race_results, name='all_race_results'),
 ]
