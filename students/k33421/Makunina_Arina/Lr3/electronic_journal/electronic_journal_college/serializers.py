@@ -27,14 +27,11 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class TeachingAssignmentSerializer(serializers.ModelSerializer):
+    discipline = DisciplineSerializer()
+    teacher = TeacherSerializer()
+
     class Meta:
         model = TeachingAssignment
-        fields = '__all__'
-
-
-class StudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student
         fields = '__all__'
 
 
@@ -51,6 +48,25 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
 
 class GradeSerializer(serializers.ModelSerializer):
+    schedule = serializers.SerializerMethodField('get_schedule_info')
+
     class Meta:
         model = Grade
+        fields = '__all__'
+
+    def get_schedule_info(self, grade):
+        schedule = grade.schedule
+        return {
+            'id': schedule.id,
+            'discipline': schedule.discipline.name,
+            'teacher': schedule.teacher.name,
+        }
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    group = GroupSerializer()
+    grades = GradeSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Student
         fields = '__all__'

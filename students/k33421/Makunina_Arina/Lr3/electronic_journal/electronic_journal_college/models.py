@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 class Room(models.Model):
@@ -99,3 +100,38 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"{self.student.name} - {self.schedule.discipline.name} - Grade: {self.grade}"
+
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = [
+        ('teacher', 'Teacher'),
+        ('student', 'Student'),
+        ('headmaster', 'Headmaster'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    # Override the groups and user_permissions fields to set a custom related_name
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        related_name='customuser_groups',  # Set a custom related_name
+        related_query_name='customuser',
+    )
+
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name='customuser_user_permissions',  # Set a custom related_name
+        related_query_name='customuser',
+    )
+
+    class Meta:
+        permissions = (("can_edit_schedule", "Can edit schedule"),)
