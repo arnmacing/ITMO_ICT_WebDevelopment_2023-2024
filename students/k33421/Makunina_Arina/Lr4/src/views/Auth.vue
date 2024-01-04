@@ -41,8 +41,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useAuthStore } from '@/store';
-import router from '@/router'; // Import router
+import { useAuthStore } from '@/stores';
+import {router} from "@/helpers";
 
 const authStore = useAuthStore();
 

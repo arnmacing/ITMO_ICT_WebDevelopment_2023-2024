@@ -1,12 +1,11 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.models import AbstractUser, Permission
 
 
 class Room(models.Model):
     number = models.CharField(max_length=10, unique=True)
     capacity = models.PositiveIntegerField()
-    type = models.CharField(max_length=50)
 
     def __str__(self):
         return f"Room {self.number}"
@@ -14,8 +13,7 @@ class Room(models.Model):
 
 class Teacher(models.Model):
     name = models.CharField(max_length=100)
-    room = models.CharField(max_length=100, blank=True, null=True)
-    disciplines = models.ManyToManyField('Discipline', through='TeachingAssignment')
+    room = models.ForeignKey(Room, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -30,43 +28,31 @@ class Discipline(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=100)
+    course = models.PositiveSmallIntegerField(validators=[MaxValueValidator(4)])
 
     def __str__(self):
-        return self.name
-
-
-class TeachingAssignment(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE)
-    semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)])
-
-    class Meta:
-        unique_together = ('teacher', 'discipline', 'semester')
-
-    def __str__(self):
-        return f"{self.discipline} - {self.teacher} (Semester {self.semester})"
+        return f"{self.name} ({self.course} курс)"
 
 
 class Student(models.Model):
     name = models.CharField(max_length=100)
-    group = models.ForeignKey(Group, related_name='students', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name="students", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
 
 class TimeSlot(models.Model):
-    DAYS_OF_WEEK = (
-        (1, 'Monday'),
-        (2, 'Tuesday'),
-        (3, 'Wednesday'),
-        (4, 'Thursday'),
-        (5, 'Friday'),
-        (6, 'Saturday'),
-        (7, 'Sunday'),
-    )
+    class DayOfWeek(models.TextChoices):
+        MONDAY = "monday", "Понедельник"
+        TUESDAY = "tuesday", "Вторник"
+        WEDNESDAY = "wednesday", "Среда"
+        THURSDAY = "thursday", "Четверг"
+        FRIDAY = "friday", "Пятница"
+        SATURDAY = "saturday", "Суббота"
+        SUNDAY = "sunday", "Воскресенье"
 
-    day_of_week = models.IntegerField(choices=DAYS_OF_WEEK, validators=[MinValueValidator(1), MaxValueValidator(7)])
+    day_of_week = models.CharField(max_length=9, choices=DayOfWeek.choices)
     start_time = models.TimeField()
     end_time = models.TimeField()
 
@@ -78,60 +64,40 @@ class TimeSlot(models.Model):
 
 
 class Schedule(models.Model):
-    group = models.ForeignKey(Group, related_name='schedules', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name="schedules", on_delete=models.CASCADE)
+    semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(8)])
     timeslot = models.ForeignKey(TimeSlot, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, related_name='schedules', on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, related_name="schedules", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.group.name} {self.timeslot.get_day_of_week_display()} {self.timeslot.start_time} - " \
-               f"{self.timeslot.end_time}, Room: {self.room.number} - {self.discipline.name} by {self.teacher.name}"
+        return (
+            f"{self.group.name} {self.timeslot.get_day_of_week_display()} {self.timeslot.start_time} - "
+            f"{self.timeslot.end_time}, Room: {self.room.number} - {self.discipline.name} by {self.teacher.name}"
+        )
 
 
 class Grade(models.Model):
-    schedule = models.ForeignKey(Schedule, related_name='grades', on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, related_name='grades', on_delete=models.CASCADE)
-    grade = models.DecimalField(max_digits=3, decimal_places=1,
-                                validators=[MinValueValidator(1.0), MaxValueValidator(5.0)])
+    semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(8)])
+    discipline = models.ForeignKey(Discipline, related_name="grades", on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, related_name="grades", on_delete=models.CASCADE)
+    grade = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
     class Meta:
-        unique_together = ('schedule', 'student')
+        unique_together = ("semester", "discipline", "student")
 
     def __str__(self):
-        return f"{self.student.name} - {self.schedule.discipline.name} - Grade: {self.grade}"
+        return f"{self.student.name} - {self.discipline.name} - Grade: {self.grade}"
 
 
-from django.contrib.auth.models import AbstractUser
-from django.db import models
+class UserRole(models.Model):
+    class Role(models.TextChoices):
+        SUB_DEAN = "sub_dean", "Заместитель декана"
+        DISPATCHER = "dispatcher", "Диспетчер"
 
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE, related_name="role", verbose_name="Пользователь")
+    role = models.CharField(max_length=10, choices=Role.choices, verbose_name="Роль")
 
-class CustomUser(AbstractUser):
-    ROLE_CHOICES = [
-        ('teacher', 'Teacher'),
-        ('student', 'Student'),
-        ('headmaster', 'Headmaster'),
-    ]
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-
-    # Override the groups and user_permissions fields to set a custom related_name
-    groups = models.ManyToManyField(
-        'auth.Group',
-        verbose_name='groups',
-        blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name='customuser_groups',  # Set a custom related_name
-        related_query_name='customuser',
-    )
-
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        verbose_name='user permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        related_name='customuser_user_permissions',  # Set a custom related_name
-        related_query_name='customuser',
-    )
-
-    class Meta:
-        permissions = (("can_edit_schedule", "Can edit schedule"),)
+    def __str__(self):
+        return self.role
