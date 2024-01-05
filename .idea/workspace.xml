@@ -4,42 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8a52f3cb-98cd-4e9e-a677-04934866da68" name="Changes" comment="lab-03 done">
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/LoginComponent.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/RegisterComponent.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/ScheduleComponent.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/fetch-wrapper.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/router.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/vuetify.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/stores/auth.store.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/DispatcherHome.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/SubDeanHome.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/TeachersList.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/index.js" afterDir="false" />
+    <list default="true" id="8a52f3cb-98cd-4e9e-a677-04934866da68" name="Changes" comment="lab-04 done">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/migrations/0002_customuser.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/StudentCabinet.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/StudentList.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/stores/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Auth.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Auth.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/StudentCabinet.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/StudentList.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Unauth.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Unauth.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/ScheduleComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/ScheduleComponent.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -230,7 +200,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701190051336</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="lab-04 done">
+      <option name="closed" value="true" />
+      <created>1704372924409</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1704372924409</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -248,7 +226,8 @@
     <MESSAGE value="pw 3" />
     <MESSAGE value="update mkdocs.yml" />
     <MESSAGE value="lab-03 done" />
-    <option name="LAST_COMMIT_MESSAGE" value="lab-03 done" />
+    <MESSAGE value="lab-04 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="lab-04 done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

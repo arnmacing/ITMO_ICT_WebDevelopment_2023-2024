@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework.views import APIView
 
 from rest_framework.permissions import IsAuthenticated
 
-from electronic_journal_college.models import Teacher, Student, Grade, TimeSlot, Discipline, Schedule
+from .models import Teacher, Student, Grade, TimeSlot, Discipline, Schedule, Room, Group
 
 
 class UserRoleView(APIView):
@@ -352,15 +353,23 @@ class GradeView(APIView):
         return Response({"status": "success"})
 
 
+class AvailableRoomsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        rooms = Room.objects.values("id", "number").all()
+        return Response({"available_rooms": rooms})
+
+
 class TimeSlotsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request):
+    def get(self, request):
         time_slots = TimeSlot.objects.order_by("day_of_week", "start_time").all()
 
-        formatted_time_slots = {"time_slots": []}
+        formatted_time_slots = []
         for time_slot in time_slots:
-            formatted_time_slots["time_slots"].append(
+            formatted_time_slots.append(
                 {
                     "id": time_slot.id,
                     "start_time": time_slot.start_time.strftime("%H:%M"),
@@ -370,7 +379,7 @@ class TimeSlotsView(APIView):
                 }
             )
 
-        return Response(formatted_time_slots)
+        return Response({"time_slots": formatted_time_slots}, status=status.HTTP_200_OK)
 
     def post(self, request: Request):
         data: dict[str, Any] = request.data
@@ -503,7 +512,7 @@ class ScheduleView(APIView):
     def post(self, request: Request):
         data: dict[str, Any] = request.data
         semester = data.get("semester")
-        group_id = data.get("group_id")
+        group_name = data.get("group_name")
         time_slot_id = data.get("time_slot_id")
         room_id = data.get("room_id")
         discipline_id = data.get("discipline_id")
@@ -512,31 +521,36 @@ class ScheduleView(APIView):
         errors = {"errors": []}
 
         if not semester:
-            errors["errors"].append("'semester' is required field")
-        if not group_id:
-            errors["errors"].append("'group_id' is required field")
+            errors["errors"].append("'semester' is a required field")
+        if not group_name:
+            errors["errors"].append("'group_name' is a required field")
         if not time_slot_id:
-            errors["errors"].append("'time_slot_id' is required field")
+            errors["errors"].append("'time_slot_id' is a required field")
         if not room_id:
-            errors["errors"].append("'room_id' is required field")
+            errors["errors"].append("'room_id' is a required field")
         if not discipline_id:
-            errors["errors"].append("'discipline_id' is required field")
+            errors["errors"].append("'discipline_id' is a required field")
         if not teacher_id:
-            errors["errors"].append("'teacher_id' is required field")
+            errors["errors"].append("'teacher_id' is a required field")
 
         if errors["errors"]:
-            return Response(errors, status.HTTP_400_BAD_REQUEST)
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({"error": f"Group '{group_name}' does not exist!"}, status=status.HTTP_404_NOT_FOUND)
 
         Schedule.objects.create(
             semester=semester,
-            group_id=group_id,
+            group=group,
             timeslot_id=time_slot_id,
             room_id=room_id,
             discipline_id=discipline_id,
             teacher_id=teacher_id,
         )
 
-        return Response({"status": "success"})
+        return Response({"status": "success"}, status=status.HTTP_201_CREATED)
 
     def delete(self, request: Request):
         schedule_id = int(request.query_params.get("id")) if request.query_params.get("id") else None
@@ -554,3 +568,36 @@ class ScheduleView(APIView):
 
         schedule.delete()
         return Response({"status": "success"})
+
+    def put(self, request: Request):
+        schedule_id = int(request.query_params.get("id")) if request.query_params.get("id") else None
+
+        if not schedule_id:
+            return Response({"error": "'id' is required field"}, status.HTTP_400_BAD_REQUEST)
+
+        try:
+            schedule = Schedule.objects.get(id=schedule_id)
+        except Schedule.DoesNotExist:
+            return Response({"error": "Schedule does not exist!"}, status.HTTP_404_NOT_FOUND)
+
+        data: Dict[str, Any] = request.data
+
+        time_slot_id = data.get("time_slot_id")
+        if time_slot_id is not None:
+            schedule.timeslot_id = time_slot_id
+
+        room_id = data.get("room_id")
+        if room_id is not None:
+            schedule.room_id = room_id
+
+        discipline_id = data.get("discipline_id")
+        if discipline_id is not None:
+            schedule.discipline_id = discipline_id
+
+        teacher_id = data.get("teacher_id")
+        if teacher_id is not None:
+            schedule.teacher_id = teacher_id
+
+        schedule.save()
+
+        return Response({"status": "success"}, status=status.HTTP_200_OK)

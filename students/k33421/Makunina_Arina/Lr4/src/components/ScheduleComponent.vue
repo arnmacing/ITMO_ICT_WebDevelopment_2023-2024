@@ -7,9 +7,15 @@
     </v-row>
 
     <v-row>
-      <v-col v-for="dayOfWeek in orderedDaysOfWeek" :key="dayOfWeek">
-        <h3>{{ dayOfWeek }}</h3>
-        <v-table>
+      <v-col>
+        <v-btn @click="startCreate" color="primary">Добавить запись</v-btn>
+      </v-col>
+    </v-row>
+
+  <v-row v-for="(entries, dayOfWeek) in groupedSchedule" :key="dayOfWeek">
+    <v-col>
+      <h3>{{ dayOfWeek }}</h3>
+      <v-table>
           <template v-slot:default>
             <thead>
               <tr>
@@ -44,6 +50,51 @@
       </v-col>
     </v-row>
 
+        <v-dialog v-model="showCreateModal" persistent max-width="600">
+      <v-card>
+        <v-card-title class="headline">Добавление новой записи в расписание</v-card-title>
+        <v-card-text>
+          <v-form @submit.prevent="confirmCreate">
+            <v-container>
+                    <v-row>
+                      <v-col>
+                        <v-select
+                          v-model="newEntry.time_slot"
+                          :items="timeslotsOptions.map(item => item.display)"
+                          label="Время"
+                          required
+                        ></v-select>
+                        <v-select
+                          v-model="newEntry.room_id"
+                          :items="roomOptions"
+                          label="Аудитория"
+                          required
+                        ></v-select>
+                        <v-select
+                          v-model="newEntry.discipline_id"
+                          :items="disciplineOptions"
+                          label="Предмет"
+                          required
+                        ></v-select>
+                        <v-select
+                          v-model="newEntry.teacher_id"
+                          :items="teacherOptions"
+                          label="Преподаватель"
+                          required
+                        ></v-select>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+
+                  <v-card-actions>
+                    <v-btn color="green darken-1" type="submit">Добавить</v-btn>
+                    <v-btn color="red darken-1" @click="showCreateModal = false">Отмена</v-btn>
+                  </v-card-actions>
+                </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="showDeleteConfirm" persistent max-width="290">
       <v-card>
         <v-card-title class="headline">Подтверждение</v-card-title>
@@ -56,7 +107,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="showEditModal" persistent max-width="600">
+      <v-dialog v-model="showEditModal" persistent max-width="600">
       <v-card>
         <v-card-title class="headline">Редактирование элемента расписания</v-card-title>
         <v-card-text>
@@ -64,12 +115,20 @@
             <v-container>
               <v-row>
                 <v-col>
-                  <v-text-field v-model="editedEntry.time_slot.day_of_week_display" label="Дата" required></v-text-field>
-                  <v-text-field v-model="editedEntry.time_slot.start_time" label="Время начала" required></v-text-field>
-                  <v-text-field v-model="editedEntry.time_slot.end_time" label="Время окончания" required></v-text-field>
-                  <v-text-field v-model="editedEntry.room.name" label="Аудитория" required></v-text-field>
-                  <v-text-field v-model="editedEntry.discipline.name" label="Предмет" required></v-text-field>
-                  <v-text-field v-model="editedEntry.teacher.name" label="Преподаватель" required></v-text-field>
+                  <v-select
+                   v-model="editedEntry.time_slot_display"
+                   :items="timeslotsOptions.map(item => item.display)"
+                   label="Время"
+                   required
+                  ></v-select>
+                  <v-select
+                    v-model="editedEntry.room.name"
+                    :items="roomOptions"
+                    label="Аудитория"
+                    required
+                  ></v-select>
+                  <v-select v-model="editedEntry.discipline.name" :items="disciplineOptions" label="Предмет" required></v-select>
+                  <v-select v-model="editedEntry.teacher.name" :items="teacherOptions" label="Преподаватель" required></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -101,42 +160,130 @@ export default {
       showDeleteConfirm: false,
       scheduleIdToDelete: null,
       showEditModal: false,
+      showCreateModal: false,
+      newEntry: {
+        time_slot_id: null,
+        room_id: null,
+        discipline_id: null,
+        teacher_id: null,
+      },
       scheduleIdToEdit: null,
       editedEntry: {
-        time_slot: {
-          day_of_week_display: '',
-          start_time: '',
-          end_time: '',
-        },
+        time_slot_id: null,
         room: { name: '' },
         discipline: { name: '' },
         teacher: { name: '' },
       },
+      timeslotsOptions: [],
+      roomOptions: [],
+      disciplineOptions: [],
+      teacherOptions: [],
+      availableRooms: [],
     };
   },
-  computed: {
-    orderedDaysOfWeek() {
-      // Order days of week
-      return _.orderBy(_.uniq(this.schedule.map(entry => entry.time_slot.day_of_week_display)));
-    },
-    groupedSchedule() {
-      // Group schedule by day of week
-      return _.groupBy(this.schedule, 'time_slot.day_of_week_display');
-    },
-  },
-  mounted() {
-    this.group = this.$route.query.group;
-    this.semester = this.$route.query.semester;
-    this.fetchSchedule();
-  },
+
+computed: {
+orderedDaysOfWeek() {
+  const daysMapping = {
+    'Monday': 'Понедельник',
+    'Tuesday': 'Вторник',
+    'Wednesday': 'Среда',
+    'Thursday': 'Четверг',
+    'Friday': 'Пятница',
+    'Saturday': 'Суббота',
+  };
+
+  const orderedDays = _.orderBy(
+    _.uniq(this.schedule.map(entry => daysMapping[entry.time_slot.day_of_week_display])),
+    day => Object.keys(daysMapping).indexOf(day)
+  );
+
+  console.log('Ordered Days:', orderedDays);
+
+  return orderedDays;
+},
+
+groupedSchedule() {
+  const grouped = _.groupBy(this.schedule, 'time_slot.day_of_week_display');
+
+  console.log('Grouped Schedule:', grouped);
+
+  return grouped;
+},
+},
+
+
+async mounted() {
+  this.group = this.$route.query.group;
+  this.semester = this.$route.query.semester;
+
+  try {
+    await this.fetchSchedule();
+
+    await this.fetchTimeSlotOptions();
+    await this.fetchRoomOptions();
+    await this.fetchDisciplineOptions();
+    await this.fetchTeacherOptions();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+},
   methods: {
     async fetchSchedule() {
       try {
         const data = await fetchWrapper.get(`${baseUrl}/schedule/?group=${this.group}&semester=${this.semester}`);
+        console.log('Fetched Schedule Data:', data);
         this.schedule = data.schedule;
       } catch (error) {
         console.error('Error fetching schedule:', error);
+        throw error; // Rethrow the error to propagate it up the call stack
       }
+    },
+    async fetchTimeSlotOptions() {
+      try {
+        const data = await fetchWrapper.get(`${baseUrl}/time_slots/`);
+        console.log('Time Slots Data:', data);
+        this.timeslotsOptions = data.time_slots.map(slot => ({
+          id: slot.id,
+          display: `${slot.day_of_week_display} ${slot.start_time} - ${slot.end_time}`,
+        }));
+      } catch (error) {
+        console.error('Error fetching time slots:', error);
+      }
+    },
+    async fetchRoomOptions() {
+      try {
+        const data = await fetchWrapper.get(`${baseUrl}/rooms/`);
+        this.roomOptions = data.available_rooms.map(room => room.number);
+        console.log('Room Options:', this.roomOptions);
+      } catch (error) {
+        console.error('Error fetching room options:', error);
+      }
+    },
+    async fetchDisciplineOptions() {
+      try {
+        const data = await fetchWrapper.get(`${baseUrl}/disciplines/`);
+        this.disciplineOptions = data.map(discipline => discipline.name);
+      } catch (error) {
+        console.error('Error fetching discipline options:', error);
+      }
+    },
+    async fetchTeacherOptions() {
+      try {
+        const data = await fetchWrapper.get(`${baseUrl}/teachers/`);
+        this.teacherOptions = data.teachers.map(teacher => teacher.name);
+      } catch (error) {
+        console.error('Error fetching teacher options:', error);
+      }
+    },
+    startCreate() {
+      this.showCreateModal = true;
+      this.newEntry = {
+        time_slot: null,
+        room_id: null,
+        discipline_id: null,
+        teacher_id: null,
+      };
     },
     startDelete(scheduleId) {
       this.scheduleIdToDelete = scheduleId;
@@ -147,6 +294,32 @@ export default {
       this.showDeleteConfirm = false;
       this.scheduleIdToDelete = null;
     },
+    async confirmCreate() {
+      try {
+        // Найдите выбранный временной слот
+        const selectedTimeSlot = this.timeslotsOptions.find(slot => slot.id === this.newEntry.time_slot_id);
+
+        const response = await fetchWrapper.post(`${baseUrl}/schedule/`, {
+          semester: this.semester,
+          group_name: this.group,
+          time_slot_id: this.newEntry.time_slot_id,
+          room_id: this.newEntry.room_id,
+          discipline_id: this.newEntry.discipline_id,
+          teacher_id: this.newEntry.teacher_id,
+        });
+
+        if (response.status === 'success') {
+          this.newEntry.time_slot = selectedTimeSlot ? selectedTimeSlot.display : '';
+          await this.fetchSchedule();
+        } else {
+          console.error('Failed to create schedule entry:', response);
+        }
+      } catch (error) {
+        console.error('Error creating schedule entry:', error);
+      }
+
+      this.showCreateModal = false;
+    },
     async deleteSchedule(scheduleId) {
       try {
         await fetchWrapper.delete(`${baseUrl}/schedule/?id=${scheduleId}`);
@@ -156,45 +329,43 @@ export default {
       }
     },
     startEdit(scheduleId) {
-      this.scheduleIdToEdit = scheduleId;
-      this.showEditModal = true;
-      const existingEntry = this.schedule.find(entry => entry.id === scheduleId);
+     this.scheduleIdToEdit = scheduleId;
+     const existingEntry = this.schedule.find(entry => entry.id === scheduleId);
       if (existingEntry) {
-        this.editedEntry = { ...existingEntry };
+        const timeSlotDisplay = this.timeslotsOptions.find(slot => slot.id === existingEntry.time_slot.id)?.display;
+        this.editedEntry = {
+          time_slot_display: timeSlotDisplay || '',
+          room: { name: existingEntry.room.name },
+          discipline: { name: existingEntry.discipline.name },
+          teacher: { name: existingEntry.teacher.name },
+          roomSelectionEnabled: false, // Set to true or false based on your requirements
+        };
       }
+     this.showEditModal = true;
     },
     async confirmEdit() {
       try {
-        const room = await fetchWrapper.get(`${baseUrl}/room/?name=${this.editedEntry.room.name}`);
-        const discipline = await fetchWrapper.get(`${baseUrl}/discipline/?name=${this.editedEntry.discipline.name}`);
-        const teacher = await fetchWrapper.get(`${baseUrl}/teacher/?name=${this.editedEntry.teacher.name}`);
+        const room = await fetchWrapper.get(`${baseUrl}/rooms/?name=${encodeURIComponent(this.editedEntry.room.name)}`);
+        const discipline = await fetchWrapper.get(`${baseUrl}/disciplines/?name=${encodeURIComponent(this.editedEntry.discipline.name)}`);
+        const teacher = await fetchWrapper.get(`${baseUrl}/teachers/?name=${encodeURIComponent(this.editedEntry.teacher.name)}`);
 
         if (!room || !discipline || !teacher) {
           console.error('Error fetching foreign key IDs.');
           return;
         }
 
-        this.editedEntry.room.id = room.id;
-        this.editedEntry.discipline.id = discipline.id;
-        this.editedEntry.teacher.id = teacher.id;
+        const updatedEntry = {
+          time_slot_id: this.editedEntry.time_slot_id,
+          room_id: room.id,
+          discipline_id: discipline.id,
+          teacher_id: teacher.id,
+        };
 
-        const response = await fetchWrapper.put(`${baseUrl}/schedule/${this.scheduleIdToEdit}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.editedEntry),
-        });
-
-        if (response.ok) {
-          this.fetchSchedule();
-        } else {
-          console.error('Error updating schedule entry:', response.statusText);
-        }
+        await fetchWrapper.put(`${baseUrl}/schedule/?id=${this.scheduleIdToEdit}`, updatedEntry);
+        await this.fetchSchedule();
       } catch (error) {
         console.error('Error updating schedule entry:', error);
       }
-
       this.showEditModal = false;
       this.scheduleIdToEdit = null;
     },
@@ -203,5 +374,4 @@ export default {
 </script>
 
 <style scoped>
-/* Добавьте пользовательские стили, если необходимо */
 </style>
