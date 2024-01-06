@@ -36,16 +36,12 @@ const routes = [
   },
   {
     path: '/schedule',
-    component: () => {
-      if (localStorage.getItem('role') === '"Заместитель декана"') {
-        return import('@/views/Unauth.vue');
-      } else if (localStorage.getItem('role') === '"Диспетчер"') {
-        return import('@/components/ScheduleComponent.vue');
-      } else {
-        return import('@/views/Unauth.vue');
-      }
-    }
-  }
+    component: ScheduleComponent,
+    props: route => ({
+      group: route.query.group,
+      semester: route.query.semester,
+    }),
+  },
 ];
 
 export const router = createRouter({

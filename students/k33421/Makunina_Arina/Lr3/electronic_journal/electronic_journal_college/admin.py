@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from electronic_journal_college.models import (
+from .models import (
     Room,
     Teacher,
     Discipline,

@@ -12,9 +12,9 @@
       </v-col>
     </v-row>
 
-  <v-row v-for="(entries, dayOfWeek) in groupedSchedule" :key="dayOfWeek">
-    <v-col>
-      <h3>{{ dayOfWeek }}</h3>
+<v-row v-for="(entries, dayOfWeek) in groupedSchedule" :key="dayOfWeek">
+  <v-col v-if="entries && entries.length > 0">
+    <h3>{{ dayOfWeek }}</h3>
       <v-table>
           <template v-slot:default>
             <thead>
@@ -30,9 +30,9 @@
             <tbody>
               <tr v-for="entry in groupedSchedule[dayOfWeek]" :key="entry.id">
                 <td style="width: 20%;">{{ entry.time_slot.start_time }} - {{ entry.time_slot.end_time }}</td>
-                <td style="width: 20%;">{{ entry.room.name }}</td>
-                <td style="width: 20%;">{{ entry.discipline.name }}</td>
-                <td style="width: 20%;">{{ entry.teacher.name }}</td>
+                <td style="width: 20%;">{{ entry.room && entry.room.name }}</td>
+                <td style="width: 20%;">{{ entry.discipline && entry.discipline.name }}</td>
+                <td style="width: 20%;">{{ entry.teacher && entry.teacher.name }}</td>
                 <td style="width: 10%;">
                   <v-btn icon @click="startEdit(entry.id)">
                     <v-icon color="blue">mdi-pencil</v-icon>
@@ -59,27 +59,35 @@
                     <v-row>
                       <v-col>
                         <v-select
-                          v-model="newEntry.time_slot"
-                          :items="timeslotsOptions.map(item => item.display)"
+                          v-model="newEntry.time_slot.id"
+                          :items="timeslotsOptions.map(item => item)"
                           label="Время"
+                          item-text="display"
+                          item-value="id"
                           required
                         ></v-select>
                         <v-select
                           v-model="newEntry.room_id"
                           :items="roomOptions"
                           label="Аудитория"
+                          item-text="name"
+                          item-value="id"
                           required
                         ></v-select>
                         <v-select
                           v-model="newEntry.discipline_id"
                           :items="disciplineOptions"
                           label="Предмет"
+                          item-text="name"
+                          item-value="id"
                           required
                         ></v-select>
                         <v-select
                           v-model="newEntry.teacher_id"
                           :items="teacherOptions"
                           label="Преподаватель"
+                          item-text="name"
+                          item-value="id"
                           required
                         ></v-select>
                       </v-col>
@@ -116,19 +124,25 @@
               <v-row>
                 <v-col>
                   <v-select
-                   v-model="editedEntry.time_slot_display"
-                   :items="timeslotsOptions.map(item => item.display)"
-                   label="Время"
-                   required
+                   v-model="editedEntry.time_slot_id"
+                  :items="timeslotsOptions"
+                  label="Время"
+                  item-text="display"
+                  item-value="id"
+                  required
                   ></v-select>
                   <v-select
                     v-model="editedEntry.room.name"
                     :items="roomOptions"
                     label="Аудитория"
+                    item-text="name"
+                   item-value="id"
                     required
                   ></v-select>
-                  <v-select v-model="editedEntry.discipline.name" :items="disciplineOptions" label="Предмет" required></v-select>
-                  <v-select v-model="editedEntry.teacher.name" :items="teacherOptions" label="Преподаватель" required></v-select>
+                  <v-select v-model="editedEntry.discipline.name" :items="disciplineOptions" label="Предмет" item-text="name"
+                   item-value="id" required></v-select>
+                  <v-select v-model="editedEntry.teacher.name" :items="teacherOptions" label="Преподаватель" item-text="name"
+                   item-value="id" required></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -170,9 +184,9 @@ export default {
       scheduleIdToEdit: null,
       editedEntry: {
         time_slot_id: null,
-        room: { name: '' },
-        discipline: { name: '' },
-        teacher: { name: '' },
+        room_id: null,
+        discipline_id: null,
+        teacher_id: null,
       },
       timeslotsOptions: [],
       roomOptions: [],
@@ -252,30 +266,41 @@ async mounted() {
       }
     },
     async fetchRoomOptions() {
-      try {
-        const data = await fetchWrapper.get(`${baseUrl}/rooms/`);
-        this.roomOptions = data.available_rooms.map(room => room.number);
-        console.log('Room Options:', this.roomOptions);
-      } catch (error) {
-        console.error('Error fetching room options:', error);
-      }
-    },
-    async fetchDisciplineOptions() {
-      try {
-        const data = await fetchWrapper.get(`${baseUrl}/disciplines/`);
-        this.disciplineOptions = data.map(discipline => discipline.name);
-      } catch (error) {
-        console.error('Error fetching discipline options:', error);
-      }
-    },
-    async fetchTeacherOptions() {
-      try {
-        const data = await fetchWrapper.get(`${baseUrl}/teachers/`);
-        this.teacherOptions = data.teachers.map(teacher => teacher.name);
-      } catch (error) {
-        console.error('Error fetching teacher options:', error);
-      }
-    },
+  try {
+    const data = await fetchWrapper.get(`${baseUrl}/rooms/`);
+    this.roomOptions = data.available_rooms.map(room => ({
+      id: room.id,
+      name: room.number,
+    }));
+  } catch (error) {
+    console.error('Error fetching room options:', error);
+  }
+},
+
+async fetchDisciplineOptions() {
+  try {
+    const data = await fetchWrapper.get(`${baseUrl}/disciplines/`);
+    this.disciplineOptions = data.map(discipline => ({
+      id: discipline.id,
+      name: discipline.name,
+    }));
+  } catch (error) {
+    console.error('Error fetching discipline options:', error);
+  }
+},
+
+async fetchTeacherOptions() {
+  try {
+    const data = await fetchWrapper.get(`${baseUrl}/teachers/`);
+    this.teacherOptions = data.teachers.map(teacher => ({
+      id: teacher.id,
+      name: teacher.name,
+    }));
+  } catch (error) {
+    console.error('Error fetching teacher options:', error);
+  }
+},
+
     startCreate() {
       this.showCreateModal = true;
       this.newEntry = {
@@ -294,32 +319,28 @@ async mounted() {
       this.showDeleteConfirm = false;
       this.scheduleIdToDelete = null;
     },
-    async confirmCreate() {
-      try {
-        // Найдите выбранный временной слот
-        const selectedTimeSlot = this.timeslotsOptions.find(slot => slot.id === this.newEntry.time_slot_id);
+async confirmCreate() {
+  try {
+    const response = await fetchWrapper.post(`${baseUrl}/schedule/`, {
+      semester: this.semester,
+      group_name: this.group,
+      time_slot_id: this.newEntry.time_slot_id,
+      room_id: this.newEntry.room_id,
+      discipline_id: this.newEntry.discipline_id,
+      teacher_id: this.newEntry.teacher_id,
+    });
 
-        const response = await fetchWrapper.post(`${baseUrl}/schedule/`, {
-          semester: this.semester,
-          group_name: this.group,
-          time_slot_id: this.newEntry.time_slot_id,
-          room_id: this.newEntry.room_id,
-          discipline_id: this.newEntry.discipline_id,
-          teacher_id: this.newEntry.teacher_id,
-        });
+    if (response.status === 'success') {
+      await this.fetchSchedule();
+    } else {
+      console.error('Failed to create schedule entry:', response);
+    }
+  } catch (error) {
+    console.error('Error creating schedule entry:', error);
+  }
 
-        if (response.status === 'success') {
-          this.newEntry.time_slot = selectedTimeSlot ? selectedTimeSlot.display : '';
-          await this.fetchSchedule();
-        } else {
-          console.error('Failed to create schedule entry:', response);
-        }
-      } catch (error) {
-        console.error('Error creating schedule entry:', error);
-      }
-
-      this.showCreateModal = false;
-    },
+  this.showCreateModal = false;
+},
     async deleteSchedule(scheduleId) {
       try {
         await fetchWrapper.delete(`${baseUrl}/schedule/?id=${scheduleId}`);
@@ -328,47 +349,45 @@ async mounted() {
         console.error('Error deleting schedule entry:', error);
       }
     },
-    startEdit(scheduleId) {
-     this.scheduleIdToEdit = scheduleId;
-     const existingEntry = this.schedule.find(entry => entry.id === scheduleId);
-      if (existingEntry) {
-        const timeSlotDisplay = this.timeslotsOptions.find(slot => slot.id === existingEntry.time_slot.id)?.display;
-        this.editedEntry = {
-          time_slot_display: timeSlotDisplay || '',
-          room: { name: existingEntry.room.name },
-          discipline: { name: existingEntry.discipline.name },
-          teacher: { name: existingEntry.teacher.name },
-          roomSelectionEnabled: false, // Set to true or false based on your requirements
-        };
-      }
-     this.showEditModal = true;
-    },
-    async confirmEdit() {
-      try {
-        const room = await fetchWrapper.get(`${baseUrl}/rooms/?name=${encodeURIComponent(this.editedEntry.room.name)}`);
-        const discipline = await fetchWrapper.get(`${baseUrl}/disciplines/?name=${encodeURIComponent(this.editedEntry.discipline.name)}`);
-        const teacher = await fetchWrapper.get(`${baseUrl}/teachers/?name=${encodeURIComponent(this.editedEntry.teacher.name)}`);
+startEdit(scheduleId) {
+  this.scheduleIdToEdit = scheduleId;
+  const existingEntry = this.schedule.find(entry => entry.id === scheduleId);
+  if (existingEntry) {
+    this.editedEntry = {
+      time_slot_id: existingEntry.time_slot.id,
+      room_id: existingEntry.room.id,
+      discipline_id: existingEntry.discipline.id,
+      teacher_id: existingEntry.teacher.id,
+    };
+  }
+  this.showEditModal = true;
+},
+async confirmEdit() {
+  try {
+    // Send an update request to the server
+    const response = await fetchWrapper.put(`${baseUrl}/schedule/${this.scheduleIdToEdit}`, {
+      time_slot_id: this.editedEntry.time_slot_id,
+      room_id: this.editedEntry.room_id,
+      discipline_id: this.editedEntry.discipline_id,
+      teacher_id: this.editedEntry.teacher_id,
+    });
 
-        if (!room || !discipline || !teacher) {
-          console.error('Error fetching foreign key IDs.');
-          return;
-        }
+    if (response.status === 'success') {
+      // Fetch and refresh the schedule list after editing
+      await this.fetchSchedule();
+    } else {
+      console.error('Failed to edit schedule entry:', response);
+    }
+  } catch (error) {
+    console.error('Error editing schedule entry:', error);
+  }
 
-        const updatedEntry = {
-          time_slot_id: this.editedEntry.time_slot_id,
-          room_id: room.id,
-          discipline_id: discipline.id,
-          teacher_id: teacher.id,
-        };
+  // Close the edit dialog
+  this.showEditModal = false;
+  this.scheduleIdToEdit = null;
+},
 
-        await fetchWrapper.put(`${baseUrl}/schedule/?id=${this.scheduleIdToEdit}`, updatedEntry);
-        await this.fetchSchedule();
-      } catch (error) {
-        console.error('Error updating schedule entry:', error);
-      }
-      this.showEditModal = false;
-      this.scheduleIdToEdit = null;
-    },
+
   },
 };
 </script>

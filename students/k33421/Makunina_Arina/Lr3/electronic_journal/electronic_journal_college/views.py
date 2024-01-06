@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Any, Dict
 
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -19,6 +18,14 @@ class UserRoleView(APIView):
         user = request.user
 
         return Response({"role": user.role.get_role_display() if hasattr(user, "role") else None})
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        request.auth.delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class TeacherView(APIView):

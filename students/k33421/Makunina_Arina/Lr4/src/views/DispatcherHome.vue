@@ -1,6 +1,11 @@
 <template>
   <v-container class="mt-10">
     <v-row justify="center">
+      <v-col cols="12" class="text-center">
+        <h1>Страница диспетчера</h1>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
       <v-col cols="12" sm="6" md="4">
         <v-card>
           <v-card-title>Расписание</v-card-title>
@@ -51,16 +56,24 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-row justify="center">
+      <v-col cols="12" class="text-center mt-4">
+        <v-btn @click="logout" color="error" dark>Выход</v-btn>
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-const schedule = ref([])
+import { useAuthStore } from '@/stores/auth.store.js';
 
 const router = useRouter()
 
+const schedule = ref([])
 const groupDialog = ref(false)
 const semesterDialog = ref(false)
 const groups = ['К3423', 'К3342', 'К3240', 'К3142']
@@ -86,30 +99,34 @@ const closeSemesterDialog = () => {
 }
 
 const goToSchedule = async () => {
-  const selectedGroup = Object.entries(selectedGroups.value).find(([group, value]) => value)?.[0];
-  const selectedSemester = Object.entries(selectedSemesters.value).find(([semester, value]) => value)?.[0];
+  try {
+    const selectedGroup = Object.entries(selectedGroups.value).find(([group, value]) => value)?.[0];
+    const selectedSemester = Object.entries(selectedSemesters.value).find(([semester, value]) => value)?.[0];
 
-  if (selectedGroup && selectedSemester) {
-    console.log("Fetching schedule...");
-    try {
-      await fetchSchedule(selectedGroup, selectedSemester); // fetchSchedule should set the schedule.value
+    if (selectedGroup && selectedSemester) {
+      console.log("Fetching schedule...");
+
+      router.push({ path: '/schedule', query: { group: selectedGroup, semester: selectedSemester } });
+
       console.log("Schedule fetched:", schedule.value);
       closeSemesterDialog();
-
-
-
-    } catch (error) {
-      console.error("Error fetching schedule:", error);
+    } else {
+      console.error("Please select one group and one semester");
     }
-  } else {
-    // Handle error, display a message or prevent further action
-    console.error("Please select one group and one semester");
+  } catch (error) {
+    console.error("Error fetching schedule:", error);
   }
 };
 
-
+const logout = async () => {
+  try {
+    const authStore = useAuthStore();
+    await authStore.logout();
+  } catch (error) {
+    console.error("Error during logout:", error);
+  }
+};
 </script>
-
 
 <style>
   .mt-10 {

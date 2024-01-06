@@ -28,6 +28,7 @@ urlpatterns = [
     path("schedule/", ScheduleView.as_view(), name="schedule"),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
+    path("auth/logout/", LogoutView.as_view(), name="logout"),
     path('rooms/', AvailableRoomsView.as_view(), name='available_rooms'),
     # Документация Swagger
     re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
