@@ -70,6 +70,7 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth.store.js';
+import { fetchWrapper } from "@/helpers";
 
 const router = useRouter()
 
@@ -121,11 +122,16 @@ const goToSchedule = async () => {
 const logout = async () => {
   try {
     const authStore = useAuthStore();
-    await authStore.logout();
+    await fetchWrapper.post('/auth/logout/');
+
+    authStore.logout();
+    router.push('/login');
   } catch (error) {
     console.error("Error during logout:", error);
   }
 };
+
+
 </script>
 
 <style>

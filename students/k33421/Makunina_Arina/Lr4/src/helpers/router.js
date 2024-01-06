@@ -1,11 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores';
 import { LoginComponent, RegisterComponent, ScheduleComponent } from "@/components";
-import { DispatcherHome, SubDeanHome, TeachersList, Unauth } from "@/views";
+import { DispatcherHome, SubDeanHome, TeachersList, Unauth, GroupList } from "@/views";
 
 const routes = [
   { path: '/login', component: LoginComponent },
   { path: '/register', component: RegisterComponent },
+  { path: '/unauth',
+    name: 'Unauth',
+    component: Unauth,
+  },
   {
     path: '/',
     component: function () {
@@ -27,6 +31,20 @@ const routes = [
 
       if (auth.role === "Заместитель декана") {
         return TeachersList;
+      } else if (auth.role === "Диспетчер") {
+        return Unauth;
+      } else {
+        return Unauth;
+      }
+    },
+  },
+    {
+    path: '/groups',
+    component: function () {
+      const auth = useAuthStore();
+
+      if (auth.role === "Заместитель декана") {
+        return GroupList;
       } else if (auth.role === "Диспетчер") {
         return Unauth;
       } else {
@@ -58,12 +76,18 @@ router.beforeEach(async (to, from, next) => {
     await authStore.update_role();
   }
 
-  if (authStore.access && (to.path.startsWith('/login') || to.path.startsWith('/register'))) {
-    next({ path: '/' });
-  } else if (authRequired && !authStore.access) {
-    authStore.returnUrl = to.fullPath;
-    next({ path: '/login' });
-  } else {
-    next();
+  if (to.path === '/schedule' && authStore.role !== 'Диспетчер') {
+    return next({ path: '/unauth' });
   }
+
+  if (authStore.access && (to.path.startsWith('/login') || to.path.startsWith('/register'))) {
+    return next({ path: '/' });
+  }
+
+  if (authRequired && !authStore.access) {
+    authStore.returnUrl = to.fullPath;
+    return next({ path: '/login' });
+  }
+
+  next();
 });

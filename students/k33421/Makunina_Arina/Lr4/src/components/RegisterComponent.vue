@@ -26,8 +26,19 @@ const confirmPasswordRules = [
 ];
 
 const submit = async () => {
-  // ... оставьте вашу функцию submit без изменений ...
-}
+  try {
+    const response = await fetchWrapper.post(`${baseUrl}/auth/users/`, {
+      email: email.value,
+      username: username.value,
+      password: password.value,
+    });
+
+    console.log('Registration successful:', response);
+    router.push('/login');
+  } catch (error) {
+    console.error('Registration error:', error);
+  }
+};
 </script>
 
 <template>

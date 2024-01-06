@@ -7,6 +7,20 @@ export const fetchWrapper = {
   delete: request('DELETE')
 };
 
+const logout = async () => {
+  try {
+    const authStore = useAuthStore();
+
+    // Use fetchWrapper here
+    await fetchWrapper.post('/auth/logout/');  // Replace with the actual URL of your logout API endpoint
+
+    authStore.logout();
+    router.push('/login');
+  } catch (error) {
+    console.error("Error during logout:", error);
+  }
+}
+
 function request(method) {
   return async (url, body, query) => {
     const headers = await authHeader(url);

@@ -24,8 +24,10 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        request.auth.delete()
-        return Response(status=status.HTTP_200_OK)
+        if request.auth:
+            request.auth.delete()
+            return Response({"detail": "Вы успешно вышли из системы."}, status=status.HTTP_200_OK)
+        return Response({"detail": "Нет информации об аутентификации."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TeacherView(APIView):
@@ -254,6 +256,14 @@ class StudentView(APIView):
         return Response({"status": "success"})
 
 
+from django.db.models import Avg, Func
+
+
+class AbsAvg(Func):
+    function = 'ABS'
+    arity = 1
+
+
 class GroupsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -281,10 +291,18 @@ class GroupsView(APIView):
                     "course": student.group.course,
                     "students": [],
                     "students_count": 0,
+                    "average_grade": None,
                 }
 
             student_by_groups["groups"][student.group.name]["students"].append({"id": student.id, "name": student.name})
             student_by_groups["groups"][student.group.name]["students_count"] += 1
+
+        for group_name, group_data in student_by_groups["groups"].items():
+            group_students = Student.objects.filter(group__name=group_name)
+            average_grade = group_students.aggregate(average_grade=Avg('grades__grade'))['average_grade']
+            average_grade_rounded = round(abs(average_grade),
+                                          2) if average_grade is not None else None  # Модуль и округление
+            student_by_groups["groups"][group_name]["average_grade"] = average_grade_rounded
 
         return Response(student_by_groups)
 
