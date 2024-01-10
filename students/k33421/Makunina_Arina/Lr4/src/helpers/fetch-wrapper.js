@@ -11,8 +11,7 @@ const logout = async () => {
   try {
     const authStore = useAuthStore();
 
-    // Use fetchWrapper here
-    await fetchWrapper.post('/auth/logout/');  // Replace with the actual URL of your logout API endpoint
+    await fetchWrapper.post('/auth/logout/');
 
     authStore.logout();
     router.push('/login');

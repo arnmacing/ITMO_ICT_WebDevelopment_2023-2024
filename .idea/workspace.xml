@@ -5,18 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8a52f3cb-98cd-4e9e-a677-04934866da68" name="Changes" comment="lab-04 done">
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/GroupList.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/img.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/img_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/index.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/report.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_01_2024_16_51__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_01_2024_16_51__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr3/electronic_journal/electronic_journal_college/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/RegisterComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/components/RegisterComponent.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/fetch-wrapper.js" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/fetch-wrapper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/DispatcherHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/DispatcherHome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/SubDeanHome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/SubDeanHome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/TeachersList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/TeachersList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Unauth.vue" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Unauth.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Auth.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Home.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/mkdocs.yml" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/mkdocs.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,26 +58,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/ITMO_ICT_WebDevelopment_2023-2024&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/a.makunina/PycharmProjects/ITMO_ICT_WebDevelopment_2023-2024/students/k33421/Makunina_Arina/docs/lw4",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "Errors"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\a.makunina\PycharmProjects\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\docs\lw4" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\a.makunina\PycharmProjects\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\docs\lw4" />
       <recent name="D:\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\Lr4\src\components" />
       <recent name="C:\Users\a.makunina\PycharmProjects\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\Lr4\src\views" />
       <recent name="C:\Users\a.makunina\PycharmProjects\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\Lr3\electronic_journal\electronic_journal_college" />
       <recent name="D:\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\Lr2\race_project\races" />
-      <recent name="D:\ITMO_ICT_WebDevelopment_2023-2024\students\k33421\Makunina_Arina\Lr2\race_project" />
     </key>
   </component>
   <component name="RunManager">

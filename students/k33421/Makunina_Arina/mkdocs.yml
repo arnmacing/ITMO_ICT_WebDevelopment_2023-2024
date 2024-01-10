@@ -18,3 +18,6 @@ nav:
       - pr3/practical_work.md
       - lw3/index.md
       - lw3/report.md
+  - "№4: Vue.js":
+      - lw4/index.md
+      - lw4/report.md
