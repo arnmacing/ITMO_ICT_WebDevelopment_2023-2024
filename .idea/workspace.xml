@@ -4,18 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8a52f3cb-98cd-4e9e-a677-04934866da68" name="Changes" comment="lab-04 done">
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/index.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/report.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_01_2024_16_51__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_01_2024_16_51__Changes_.xml" afterDir="false" />
+    <list default="true" id="8a52f3cb-98cd-4e9e-a677-04934866da68" name="Changes" comment="md done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/fetch-wrapper.js" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/helpers/fetch-wrapper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Auth.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/Lr4/src/views/Home.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/mkdocs.yml" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/mkdocs.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/report.md" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/docs/lw4/report.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/k33421/Makunina_Arina/site/sitemap.xml.gz" beforeDir="false" afterPath="$PROJECT_DIR$/students/k33421/Makunina_Arina/site/sitemap.xml.gz" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704548127767</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="md done">
+      <option name="closed" value="true" />
+      <created>1704899778564</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1704899778564</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -254,7 +254,8 @@
     <MESSAGE value="update mkdocs.yml" />
     <MESSAGE value="lab-03 done" />
     <MESSAGE value="lab-04 done" />
-    <option name="LAST_COMMIT_MESSAGE" value="lab-04 done" />
+    <MESSAGE value="md done" />
+    <option name="LAST_COMMIT_MESSAGE" value="md done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
